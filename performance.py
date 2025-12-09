@@ -9,13 +9,10 @@ DB_CONFIG = {
     "user": "postgres",
     "password": "root",
 }
-
 BASELINE_RUNS = 3
 OUTPUT_DIR = "."
 
-
 def get_db_connection():
-    """Establish and return a database connection."""
     try:
         return psycopg2.connect(**DB_CONFIG)
     except psycopg2.Error as e:
@@ -24,7 +21,6 @@ def get_db_connection():
 
 
 def measure_baseline():
-    """Measure baseline query execution times without materialized views."""
     print("Measuring baseline query performance...")
     conn = get_db_connection()
     cur = conn.cursor()
@@ -58,14 +54,14 @@ def measure_baseline():
     print(f"Baseline measurements saved to: {output_file}\n")
     return baseline_df 
 
+
 def measure_smart_performance():
-    """Measure query performance with smart materialized view pre-materialization."""
-    print("Measuring smart query performance with materialized views...")
+    print("Measuring smart query performance with materialized views")
     log_df = pd.read_csv("query_log.csv")
     conn = get_db_connection()
     cur = conn.cursor()
     controller = SmartController('query_log.csv')
-    controller.measure_mv_times() 
+    controller.measure_mv_times()
     results = []
 
     for i in range(len(log_df) - 1):
@@ -127,11 +123,9 @@ if __name__ == "__main__":
     try:
         baseline_df = measure_baseline()
         smart_df = measure_smart_performance()
-
         baseline_avg = baseline_df["baseline_time_sec"].mean()
         smart_avg = smart_df["runtime_sec"].mean()
         speedup = baseline_avg / smart_avg
-
         print("=" * 60)
         print("Performance Summary")
         print("=" * 60)
@@ -139,7 +133,6 @@ if __name__ == "__main__":
         print(f"Smart average time: {smart_avg:.4f}s")
         print(f"Overall speedup: {speedup:.2f}x")
         print("=" * 60)
-
     except Exception as e:
         print(f"Error during performance analysis: {e}")
         raise

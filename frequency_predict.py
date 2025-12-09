@@ -1,16 +1,11 @@
 import pandas as pd
 
-
 class FrequencyPredictor:
-    """Predict next queries based on frequency analysis of query logs."""
-
     def __init__(self, log_file):
-        """Initialize the predictor with a query log file."""
         self.log = pd.read_csv(log_file)
         self.transitions = self._build_transition_matrix()
 
     def _build_transition_matrix(self):
-        """Build a transition matrix from the query log."""
         transitions = {}
         for i in range(len(self.log) - 1):
             curr_query = self.log.iloc[i]["query_id"]
@@ -23,14 +18,12 @@ class FrequencyPredictor:
         return transitions
 
     def predict_next(self, current_query):
-        """Predict the next query based on the most common transition."""
         if current_query not in self.transitions:
             return None
         next_queries = self.transitions[current_query]
         return max(next_queries, key=next_queries.get)
 
     def get_confidence(self, current_query, next_query):
-        """Get confidence score for a specific query transition."""
         if current_query not in self.transitions:
             return 0
 
@@ -58,4 +51,4 @@ if __name__ == "__main__":
                 f"({confidence * 100:.0f}% confident)"
             )
         else:
-            print(f"  After {query} → Cannot predict (no history)")
+            print(f"  After {query},Cannot predict")

@@ -11,7 +11,7 @@ def create_schema():
 
     try:
         cur.execute("DROP DATABASE IF EXISTS ecommerce_predictor;")
-        print("✅ Dropped old database (if existed)")
+        print("Dropped old database")
     except:
         pass
 
@@ -34,7 +34,7 @@ def create_schema():
     """)
     print("Created: countries")
 
-    print("\nCreating products table...")
+    print("\nCreating products table")
     cur.execute("""
         CREATE TABLE products (
             product_id VARCHAR(20) PRIMARY KEY,
@@ -44,7 +44,7 @@ def create_schema():
     """)
     print("Created: products")
 
-    print("\nCreating customers table...")
+    print("\nCreating customers table")
     cur.execute("""
         CREATE TABLE customers (
             customer_id INT PRIMARY KEY,
@@ -53,7 +53,7 @@ def create_schema():
     """)
     print("Created: customers")
 
-    print("\nCreating orders table...")
+    print("\nCreating orders table")
     cur.execute("""
         CREATE TABLE orders (
             order_id SERIAL PRIMARY KEY,

@@ -4,8 +4,6 @@ from frequency_predict import FrequencyPredictor
 
 
 class SmartController:
-    """Controller for smart materialized view pre-materialization."""
-
     def __init__(
         self,
         log_file,
@@ -13,7 +11,6 @@ class SmartController:
         db_user="postgres",
         db_password="root",
     ):
-        """Initialize the smart controller with query predictor and database connection."""
         self.predictor = FrequencyPredictor(log_file)
 
         self.query_to_mv = {
@@ -32,8 +29,7 @@ class SmartController:
         self.cur = self.conn.cursor()
 
     def measure_mv_times(self):
-        """Measure REFRESH time of each MV and store in mv_build_times."""
-        print("Measuring MV build times...")
+        print("Measuring build time")
         for mv_name in self.query_to_mv.values():
             start = time.time()
             self.cur.execute(f"REFRESH MATERIALIZED VIEW {mv_name};")
@@ -43,7 +39,6 @@ class SmartController:
         self.conn.commit()
 
     def should_prematerialize(self, current_query, inter_arrival_time_sec):
-        """Determine if a materialized view should be pre-materialized."""
         predicted_next = self.predictor.predict_next(current_query)
         if not predicted_next:
             return False, None
@@ -66,7 +61,6 @@ class SmartController:
         return should_build, details
 
     def prematerialize_view(self, mv_name):
-        """Refresh a materialized view."""
         try:
             start = time.time()
             self.cur.execute(f"REFRESH MATERIALIZED VIEW {mv_name};")
@@ -78,6 +72,5 @@ class SmartController:
             return False, 0.0
 
     def close(self):
-        """Close database connection."""
         self.cur.close()
         self.conn.close()

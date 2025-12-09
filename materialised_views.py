@@ -1,7 +1,7 @@
 import psycopg2
 
+
 def create_materialized_views():
-    """Create materialized views for performance optimization."""
     print("Creating materialized views\n")
 
     conn = psycopg2.connect(
