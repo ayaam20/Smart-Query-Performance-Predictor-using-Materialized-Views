@@ -1,6 +1,6 @@
 import pandas as pd
 from datetime import datetime, timedelta
-impminor fixeort random
+import random
 
 
 def generate_query_log():
